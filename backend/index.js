@@ -3,6 +3,7 @@ const { Pool } = require('pg');
 const cors = require('cors');
 const app = express();
 const port = 3001;
+const { exec } = require('child_process');
 
 
 app.use(cors());
@@ -15,6 +16,19 @@ const OpenAIApi = require('openai');
 const openai = new OpenAIApi.OpenAI({
     apiKey: ""
 });
+
+app.get('/api/getTOS', async (req, res) => {
+    const {url} = req.body;
+
+    exec('python fetch_tos.py "${url}"', async (error, stdout, stderr) => {
+        if (error) {
+            console.error(`exec error: ${error}`);
+            return res.status(500).send('Server error');
+        }
+        
+        res.json(stdout)
+    })
+})
 
 app.get('/api/summurizeTOS', async (req, res) => {
     const {tos} = req.body;
