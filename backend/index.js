@@ -1,7 +1,9 @@
 const express = require('express');
+const ExpressWs = require('express-ws');
 const { Pool } = require('pg');
 const cors = require('cors');
 const app = express();
+ExpressWs(app);
 const { exec } = require('child_process');
 require('dotenv').config();
 const { StreamService } = require('./stream-service'); 
