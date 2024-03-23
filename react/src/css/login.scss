@@ -1,0 +1,95 @@
+// Variables (optional, for demonstration)
+.login-container {
+  $color-accent: #32ff7e;
+  $color-shadow: #00fff0;
+  $color-background: rgba(0, 0, 0, 0.8);
+
+  @keyframes moveTwinkBack {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: -10000px 5000px;
+    }
+  }
+
+  @keyframes colorChange {
+    0%,
+    100% {
+      filter: hue-rotate(0deg);
+    }
+    50% {
+      filter: hue-rotate(-30deg);
+    }
+  }
+
+  // Commented out as per original CSS. To use, uncomment.
+  .background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://cdn.pixabay.com/photo/2018/05/11/09/29/glass-3389935_1280.jpg');
+    animation: moveTwinkBack 200s linear infinite,
+      colorChange 10s infinite alternate;
+    z-index: -1;
+  }
+
+  form {
+    position: relative;
+    z-index: 1;
+    background-color: $color-background;
+    border-radius: 8px;
+    box-shadow: 0 0 20px $color-shadow, 0 0 40px $color-shadow,
+      0 0 60px $color-shadow;
+    padding: 40px;
+    max-width: 400px;
+    width: 100%;
+    backdrop-filter: blur(5px);
+
+    input[type='email'],
+    input[type='password'] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid $color-accent;
+      border-radius: 5px;
+      background-color: transparent;
+      color: #fff;
+    }
+
+    button[type='submit'] {
+      width: 100%;
+      padding: 12px;
+      background-color: $color-accent;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #75ffc3;
+      }
+    }
+
+    p {
+      color: #fff;
+      text-align: center;
+    }
+
+    a {
+      color: $color-accent;
+      text-decoration: none;
+      font-weight: bold;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
