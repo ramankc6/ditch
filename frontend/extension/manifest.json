@@ -5,7 +5,8 @@
   "permissions": [
     "activeTab",
     "storage",
-    "notifications"
+    "notifications",
+    "<all_urls>"
   ],
   "background": {
     "service_worker": "background.js"
