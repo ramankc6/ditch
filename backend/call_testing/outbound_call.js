@@ -15,11 +15,15 @@ async function makeOutBoundCall() {
 
   await client.calls
     .create({
-      url: `https://${process.env.SERVER}/incoming`,
+      url: `http://ec2-18-117-221-234.us-east-2.compute.amazonaws.com:3001/handle-call`,
       to: process.env.TO_NUMBER,
-      from: process.env.FROM_NUMBER
+      from: process.env.FROM_NUMBER,
+      
+      // recording parameters
+      record: true,
+      recordingStatusCallback: '/recording-callback'
     })
-    .then(call => console.log(call.sid));
+    .then(call => console.log(`SID of Outbound Call: ${call.sid}` ));
 }
 
 makeOutBoundCall();
