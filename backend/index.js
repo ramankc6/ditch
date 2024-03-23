@@ -20,12 +20,12 @@ const openai = new OpenAIApi.OpenAI({
 app.get('/api/getTOS', async (req, res) => {
     const {url} = req.body;
 
-    exec('python fetch_tos.py "${url}"', async (error, stdout, stderr) => {
+    exec('python3 fetch_tos.py ' + url, async (error, stdout, stderr) => {
         if (error) {
             console.error(`exec error: ${error}`);
             return res.status(500).send('Server error');
         }
-        
+        console.log(stdout)
         res.json(stdout)
     })
 })
