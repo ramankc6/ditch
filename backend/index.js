@@ -1,10 +1,15 @@
 const express = require('express');
+const ExpressWs = require('express-ws');
 const { Pool } = require('pg');
 const cors = require('cors');
 const app = express();
-const port = 3001;
+ExpressWs(app);
 const { exec } = require('child_process');
+require('dotenv').config();
+const { StreamService } = require('./stream-service'); 
 
+
+const port = process.env.PORT;
 
 app.use(cors());
 app.use(express.json());
@@ -14,18 +19,18 @@ const OpenAIApi = require('openai');
 
 
 const openai = new OpenAIApi.OpenAI({
-    apiKey: ""
+    apiKey: process.env.OPENAI_API_KEY
 });
 
 app.get('/api/getTOS', async (req, res) => {
     const {url} = req.body;
 
-    exec('python fetch_tos.py "${url}"', async (error, stdout, stderr) => {
+    exec('python3 fetch_tos.py ' + url, async (error, stdout, stderr) => {
         if (error) {
             console.error(`exec error: ${error}`);
             return res.status(500).send('Server error');
         }
-        
+        console.log(stdout)
         res.json(stdout)
     })
 })
@@ -46,6 +51,41 @@ app.get('/api/summurizeTOS', async (req, res) => {
         res.status(500).send('Server error');
     }
 })
+
+app.post('/handle-call', (req, res) => {
+    const twiml = new twilio.twiml.VoiceResponse();
+  
+    const stream = twiml.connect().stream({
+      url: `wss://${process.env.SERVER}/connection`,
+    });
+  
+    res.type('text/xml');
+    res.send(twiml.toString());
+  });
+
+app.ws('/connection', (ws) => {
+    ws.on('error', console.error);
+  
+    const streamService = new StreamService(ws);
+  
+    // Filled in from start message
+    let streamSid;
+  
+    // Incoming from MediaStream
+    ws.on('message', function message(data) {
+      const msg = JSON.parse(data);
+      if (msg.event === 'start') {
+        streamSid = msg.start.streamSid;
+        streamService.setStreamSid(streamSid);
+        console.log(`Twilio -> Starting Media Stream for ${streamSid}`);
+      } else if (msg.event === 'media') {
+        // Echo the received audio back to the caller
+        streamService.sendAudio(msg.media.payload);
+      } else if (msg.event === 'stop') {
+        console.log(`Twilio -> Media stream ${streamSid} ended.`);
+      }
+    });
+  });
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);

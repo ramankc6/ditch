@@ -23,3 +23,5 @@ react-frontend/.env
 react/.env
 
 node_modules
+
+.env
