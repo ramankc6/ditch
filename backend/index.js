@@ -24,6 +24,7 @@ const openai = new OpenAIApi.OpenAI({
 });
 
 app.get('/api/getTOS', async (req, res) => {
+    console.log("getTOS called")
     const {url} = req.body;
 
     exec('python3 fetch_tos.py ' + url, async (error, stdout, stderr) => {
