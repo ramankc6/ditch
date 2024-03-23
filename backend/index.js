@@ -55,11 +55,10 @@ app.get('/api/summurizeTOS', async (req, res) => {
 
 app.post('/handle-call', (req, res) => {
     const twiml = new twilio.twiml.VoiceResponse();
-  
-    const stream = twiml.connect().stream({
-      url: `ws://ec2-18-117-221-234.us-east-2.compute.amazonaws.com:3001/connection`,
-    });
-  
+
+    twiml.say('Server is working.');
+    twiml.hangup();
+
     res.type('text/xml');
     res.send(twiml.toString());
   });
