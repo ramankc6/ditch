@@ -8,7 +8,8 @@ const { exec } = require('child_process');
 const twilio = require('twilio');
 require('dotenv').config();
 const { StreamService } = require('./stream-service'); 
-
+const https = require('https')
+const fs = require('fs')
 
 const port = process.env.PORT;
 
@@ -64,7 +65,13 @@ app.post('/handle-call', (req, res) => {
     res.send(twiml.toString());
   });
 
+const privateKey = fs.readFileSync('private.key', 'utf8')
 
-app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-});
+const certificate = fs.readFileSync('certificate.crt', 'utf8')
+
+const caBundle = fs.readFileSync('ca_bundle.crt', 'utf8')
+
+const credentials = {key: privateKey, cert: certificate, ca: caBundle}
+const server = https.createServer(credentials, app)
+
+server.listen(port, console.log(`Server started on port ${port}`))
