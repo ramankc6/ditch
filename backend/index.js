@@ -24,7 +24,7 @@ const openai = new OpenAIApi.OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 });
 
-app.get('/api/getTOS', async (req, res) => {
+app.post('/api/getTOS', async (req, res) => {
     console.log("getTOS called")
     const {url} = req.body;
 
