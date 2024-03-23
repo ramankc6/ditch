@@ -1,10 +1,60 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../context/userContext'
+import '../index.css' // Assuming Tailwind is configured here
 import {
   addSubscription,
   getSubscriptions,
   removeSubscription,
-} from '../service/userService'
+} from '../service/userService' // Make sure this points to your userService file
+
+const SubscriptionCard = ({ subscription, handleRemoveSubscription }) => {
+  return (
+    <div className="w-[80%] max-w-sm flex justify-center mt-4">
+      <div className="w-full bg-white p-6 rounded-2xl shadow-lg border border-gray-200"> 
+        <div className="flex flex-col items-start gap-3"> 
+
+          {/* Company Name */}
+          <div className="flex items-center gap-2">
+            <h3 className="text-[30px] font-bold text-blue-700">Company: </h3> 
+            <p className="text-[30px] font-semibold">{subscription.companyName}</p>
+          </div>
+
+          {/* Payment  */}
+          <div>
+            <h4 className="font-medium text-gray-700">Monthly Payment:</h4>
+            <p className="text-xl font-bold text-gray-900">${subscription.monthlyPayment}</p> 
+          </div> 
+
+          {/* Comment */}
+          <div>
+            <h4 className="font-medium text-gray-700">Comment:</h4>
+            <p className="text-gray-600">{subscription.comment}</p>  
+          </div>
+
+          {/* Buttons */}
+          <div className="flex items-center gap-3 mt-4 flex-row">
+            <div className="flex items-center gap-3 mt-4 justify-left"> 
+                <button 
+                  onClick={() => window.open(`tel:${subscription.phoneNumber}`)}
+                  className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-lg"
+                >
+                  Cancel with AI
+                </button>
+            </div>
+            <div className="flex items-center gap-3 mt-4 justify-right">
+                <button onClick={() => handleRemoveSubscription(subscription)} className="bg-red-500 hover:bg-red-700 text-white px-3 py-1 rounded-lg">
+                    Delete  
+                  </button>
+            </div>  
+          </div> 
+        </div>
+      </div> 
+    </div>
+  );
+};
+
+
+
 
 const SubscriptionTable = () => {
   const [subscriptions, setSubscriptions] = useState([])
@@ -16,7 +66,6 @@ const SubscriptionTable = () => {
   const [phoneNumber, setPhoneNumber] = useState('')
 
   useEffect(() => {
-    console.log(currentUser.uid)
     const fetchSubscriptions = async () => {
       try {
         const userSubscriptions = await getSubscriptions(currentUser.uid)
@@ -29,9 +78,8 @@ const SubscriptionTable = () => {
   }, [])
 
   const handleAddSubscription = (e) => {
-    e.preventDefault() // Prevent the form from causing a page reload
+    e.preventDefault()
 
-    // Create a new subscription object
     const newSubscription = {
       companyName,
       monthlyPayment,
@@ -39,7 +87,6 @@ const SubscriptionTable = () => {
       phoneNumber,
     }
 
-    // Update the subscriptions state
     setSubscriptions([...subscriptions, newSubscription])
     try {
       addSubscription(currentUser.uid, newSubscription)
@@ -47,7 +94,6 @@ const SubscriptionTable = () => {
       console.error('Failed to add subscription:', error.message)
     }
 
-    // Clear the form inputs after adding
     setCompanyName('')
     setMonthlyPayment('')
     setComment('')
@@ -55,76 +101,70 @@ const SubscriptionTable = () => {
   }
 
   const handleRemoveSubscription = (subscription) => {
-    const updatedSubscriptions = subscriptions.filter((s) => s != subscription)
+    const updatedSubscriptions = subscriptions.filter((s) => s !== subscription) // Note the minor change here to fix object comparison
     removeSubscription(currentUser.uid, subscription)
     setSubscriptions(updatedSubscriptions)
   }
 
   return (
-    <div>
-      <table>
-        <thead>
-          <tr>
-            <th>Company Name</th>
-            <th>Monthly Payment</th>
-            <th>Comment</th>
-            <th>Phone Number</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {subscriptions.map((subscription) => (
-            <tr key={subscription.id}>
-              <td>{subscription.companyName}</td>
-              <td>{subscription.monthlyPayment}</td>
-              <td>{subscription.comment}</td>
-              <td>{subscription.phoneNumber}</td>
-              <td>
-                <button
-                  onClick={() =>
-                    window.open(`tel:${subscription.phoneNumber}`)
-                  }>
-                  Call
-                </button>
-                <button onClick={() => handleRemoveSubscription(subscription)}>
-                  Remove
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {/* Inside your component return statement, after the table */}
-      <form onSubmit={handleAddSubscription}>
-        <input
-          type="text"
-          placeholder="Company Name"
-          value={companyName}
-          onChange={(e) => setCompanyName(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Monthly Payment"
-          value={monthlyPayment}
-          onChange={(e) => setMonthlyPayment(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Comment"
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Phone Number"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-          required
-        />
-        <button type="submit">Add Subscription</button>
+    <div className="w-screen h-screen mx-auto p-6 bg-[#040a30]">
+      <h1 className="text-2xl text-[40px] text-white font-black mb-4 mx-3 mt-2">Subscriptions</h1>
+
+      <div className="mt-7 w-full bg-white p-6 rounded-2xl shadow-lg"> 
+      <h2 className="text-blue-700 text-[30px] font-bold">Add New Subscription:</h2>
+      <form onSubmit={handleAddSubscription} className="mt-2">
+        <div className="flex flex-row justify-left gap-5 items-center"> 
+          <input
+            type="text"
+            placeholder="Company Name"
+            value={companyName}
+            onChange={(e) => setCompanyName(e.target.value)}
+            required
+            className="px-4 py-2 border rounded-md text-white"
+          />
+          <input
+            type="text"
+            placeholder="Monthly Payment"
+            value={monthlyPayment}
+            onChange={(e) => setMonthlyPayment(e.target.value)}
+            required
+            className="px-4 py-2 border rounded-md text-white"
+          />
+          <input
+            type="text"
+            placeholder="Comment"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            className="px-4 py-2 border rounded-md text-white"
+          />
+          <input
+            type="text"
+            placeholder="Phone Number"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            required
+            className="px-4 py-2 border rounded-md text-white"
+          />
+        
+        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">
+          Add Subscription
+        </button>
+        </div>
       </form>
+      </div>
+
+      <div className='flex flex-wrap gap-4 mt-8'> 
+        {subscriptions.map((subscription) => (
+            <SubscriptionCard 
+            key={subscription.id} // Assume you have an ID 
+            subscription={subscription}
+            handleRemoveSubscription={handleRemoveSubscription}
+          />
+        ))}
+      </div>
+
+      
+
     </div>
   )
 }
