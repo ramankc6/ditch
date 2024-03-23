@@ -63,29 +63,6 @@ app.post('/handle-call', (req, res) => {
     res.send(twiml.toString());
   });
 
-app.ws('/connection', (ws) => {
-    ws.on('error', console.error);
-  
-    const streamService = new StreamService(ws);
-  
-    // Filled in from start message
-    let streamSid;
-  
-    // Incoming from MediaStream
-    ws.on('message', function message(data) {
-      const msg = JSON.parse(data);
-      if (msg.event === 'start') {
-        streamSid = msg.start.streamSid;
-        streamService.setStreamSid(streamSid);
-        console.log(`Twilio -> Starting Media Stream for ${streamSid}`);
-      } else if (msg.event === 'media') {
-        // Echo the received audio back to the caller
-        streamService.sendAudio(msg.media.payload);
-      } else if (msg.event === 'stop') {
-        console.log(`Twilio -> Media stream ${streamSid} ended.`);
-      }
-    });
-  });
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
