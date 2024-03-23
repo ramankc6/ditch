@@ -57,7 +57,7 @@ app.post('/handle-call', (req, res) => {
     const twiml = new twilio.twiml.VoiceResponse();
   
     const stream = twiml.connect().stream({
-      url: `wss://${process.env.SERVER}/connection`,
+      url: `ws://ec2-18-117-221-234.us-east-2.compute.amazonaws.com:3001/connection`,
     });
   
     res.type('text/xml');
