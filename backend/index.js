@@ -5,9 +5,11 @@ const cors = require('cors');
 const app = express();
 ExpressWs(app);
 const { exec } = require('child_process');
+const twilio = require('twilio');
 require('dotenv').config();
 const { StreamService } = require('./stream-service'); 
-
+const https = require('https')
+const fs = require('fs')
 
 const port = process.env.PORT;
 
@@ -22,7 +24,8 @@ const openai = new OpenAIApi.OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 });
 
-app.get('/api/getTOS', async (req, res) => {
+app.post('/api/getTOS', async (req, res) => {
+    console.log("getTOS called")
     const {url} = req.body;
 
     exec('python3 fetch_tos.py ' + url, async (error, stdout, stderr) => {
@@ -54,39 +57,21 @@ app.get('/api/summurizeTOS', async (req, res) => {
 
 app.post('/handle-call', (req, res) => {
     const twiml = new twilio.twiml.VoiceResponse();
-  
-    const stream = twiml.connect().stream({
-      url: `wss://${process.env.SERVER}/connection`,
-    });
-  
+
+    twiml.say('Server is working.');
+    twiml.hangup();
+
     res.type('text/xml');
     res.send(twiml.toString());
   });
 
-app.ws('/connection', (ws) => {
-    ws.on('error', console.error);
-  
-    const streamService = new StreamService(ws);
-  
-    // Filled in from start message
-    let streamSid;
-  
-    // Incoming from MediaStream
-    ws.on('message', function message(data) {
-      const msg = JSON.parse(data);
-      if (msg.event === 'start') {
-        streamSid = msg.start.streamSid;
-        streamService.setStreamSid(streamSid);
-        console.log(`Twilio -> Starting Media Stream for ${streamSid}`);
-      } else if (msg.event === 'media') {
-        // Echo the received audio back to the caller
-        streamService.sendAudio(msg.media.payload);
-      } else if (msg.event === 'stop') {
-        console.log(`Twilio -> Media stream ${streamSid} ended.`);
-      }
-    });
-  });
+const privateKey = fs.readFileSync('private.key', 'utf8')
 
-app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-});
+const certificate = fs.readFileSync('certificate.crt', 'utf8')
+
+const caBundle = fs.readFileSync('ca_bundle.crt', 'utf8')
+
+const credentials = {key: privateKey, cert: certificate, ca: caBundle}
+const server = https.createServer(credentials, app)
+
+server.listen(port, console.log(`Server started on port ${port}`))
