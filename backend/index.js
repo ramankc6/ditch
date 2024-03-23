@@ -2,9 +2,11 @@ const express = require('express');
 const { Pool } = require('pg');
 const cors = require('cors');
 const app = express();
-const port = 3001;
 const { exec } = require('child_process');
+require('dotenv').config();
 
+
+const port = process.env.PORT;
 
 app.use(cors());
 app.use(express.json());
@@ -14,7 +16,7 @@ const OpenAIApi = require('openai');
 
 
 const openai = new OpenAIApi.OpenAI({
-    apiKey: ""
+    apiKey: process.env.OPENAI_API_KEY
 });
 
 app.get('/api/getTOS', async (req, res) => {
