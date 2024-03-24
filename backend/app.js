@@ -113,6 +113,7 @@ app.post('/api/getTOS', async (req, res) => {
 app.ws('/connection', (ws, req) => {
   console.log("hey")
   const query = url.parse(req.url, true).query
+
   ws.on('error', console.error)
   console.log("1")
   // Filled in from start message
@@ -142,7 +143,7 @@ app.ws('/connection', (ws, req) => {
       console.log(`Twilio -> Starting Media Stream for ${streamSid}`.underline.red)
 
 
-      ttsService.generate({ partialResponseIndex: null, partialResponse: `Hello! My name is ${userName}, and I\'d like to get some help with cancelling my current subscription to ${companyName}.` }, 1)
+      ttsService.generate({ partialResponseIndex: null, partialResponse: `Hello! I\'d like to get some help with cancelling my current subscription to ${companyName}.` }, 1)
 
     } else if (msg.event === 'media') {
       // console.log("media")
