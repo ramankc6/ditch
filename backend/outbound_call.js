@@ -12,12 +12,14 @@ async function makeOutBoundCall() {
   const authToken = process.env.TWILIO_AUTH_TOKEN;
   
   const client = require('twilio')(accountSid, authToken);
+  send_url = `https://${process.env.SERVER}/incoming`
 
+  console.log(send_url)
   await client.calls
     .create({
-      url: `https://${process.env.SERVER}/handle-call`,
+      url: send_url,
       to: process.env.TO_NUMBER,
-      from: process.env.FROM_NUMBER,
+      from: process.env.FROM_NUMBER
     })
     .then(call => console.log(`SID of Outbound Call: ${call.sid}` ));
 }
