@@ -8,14 +8,15 @@ const register = async (email, password, name, phone) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password)
     try {
-      console.log('User created:', userCredential.user)
       const userDoc = doc(db, 'users', userCredential.user.uid)
       const docSnap = await getDoc(userDoc)
+      const userData = {
+        userName: name,
+        userPhone: phone,
+        userEmail: email,
+        subscriptions: []
+      }
       if (!docSnap.exists()) {
-        const userData = {
-          userName: name,
-          userPhone: phone
-        }
         await setDoc(userDoc, userData)
       }
     } catch (error) {
@@ -33,7 +34,7 @@ const login = async (email, password) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password)
     return userCredential.user
   } catch (error) {
-    console.error('Login failed:', error.code, error.message);
+    console.error('Login failed:', error.code, error.message)
     throw error
   }
 }

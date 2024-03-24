@@ -9,6 +9,30 @@ import {
 } from '../service/userService' // Make sure this points to your userService file
 
 const SubscriptionCard = ({ subscription, handleRemoveSubscription }) => {
+  const { currentUser } = useContext(UserContext)
+  const cancelSubscription = async (subscription) => {
+    console.log('Cancelling subscription:', subscription)
+    try {
+      // Call API to cancel the subscription
+      const data = {
+        subscription,
+        userName: currentUser.userName,
+        userPhone: currentUser.userPhone,
+        userEmail: currentUser.userEmail,
+      }
+      fetch(process.env.REACT_APP_SERVER + '/api/cancelSubscription', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+      console.log('Cancelling subscription:', subscription)
+    } catch (error) {
+      console.error('Failed to cancel subscription:', error.message)
+    }
+  }
+
   return (
     <div className="w-[80%] max-w-sm flex justify-center mt-4">
       <div className="w-full bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
@@ -46,7 +70,7 @@ const SubscriptionCard = ({ subscription, handleRemoveSubscription }) => {
             </div>
             <div className="flex items-center gap-3 mt-1 justify-right">
               <button
-                onClick={() => handleRemoveSubscription(subscription)}
+                onClick={() => cancelSubscription(subscription)}
                 className="bg-red-500 hover:bg-red-700 text-white px-3 py-1 rounded-lg">
                 Delete
               </button>
