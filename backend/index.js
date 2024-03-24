@@ -61,7 +61,7 @@ app.post('/handle-call', (req, res) => {
     twiml.say('Server is working.');
 
     const stream = twiml.connect().stream({
-        url: `wss://${process.env.SERVER}/connection`,
+        url: `wss://ditch.live:3001/connection`,
     });
 
     res.type('text/xml');
@@ -74,8 +74,12 @@ app.ws('/connection', (ws) => {
     const ttsClient = new textToSpeech.textToSpeechClient();
 
     ws.on('message', function message(data) {
-
-        if (msg.event === 'media') {
+        if (msg.event === 'start') {
+            streamSid = msg.start.streamSid;
+            streamService.setStreamSid(streamSid);
+            console.log(`Twilio -> Starting Media Stream for ${streamSid}`);
+        }
+        else if (msg.event === 'media') {
             deepgram.transcription.live({
                 encoding: 'mulaw', // Audio encoding format (e.g., 'mulaw', 'linear16')
                 sample_rate: 8000, // Audio sample rate (e.g., 8000, 16000)
@@ -102,6 +106,9 @@ app.ws('/connection', (ws) => {
                     streamService.sendAudio(audio.toString('base64'));
                 }
             })
+        }
+        else if (msg.event === 'stop') {
+            console.log(`Twilio -> Media stream ${streamSid} ended.`);
         }
     })
 })
