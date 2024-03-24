@@ -17,9 +17,9 @@ function searchLinks () {
 
 function sendDataToServer(data) {
   console.log(data);
-  chrome.storage.sync.get(['userName', 'userEmail'], function(storedData) {
+  chrome.storage.sync.get(['userEmail', 'compName', 'compPhone', 'userPay'], function(storedData) {
     console.log(storedData);
-    fetch('https://ditch.live:3001/api/getTOS', {
+    fetch('https://ditch.live:3000/api/getTOS', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -27,7 +27,10 @@ function sendDataToServer(data) {
       body: JSON.stringify({ 
           "url": data.links[0], 
           "userName": storedData.userName,
-          "userEmail": storedData.userEmail
+          "userEmail": storedData.userEmail,
+          "compName": storedData.compName,
+          "compPhone": storedData.compPhone,
+          "userPay": storedData.userPay
       })
     })
     .then(response => response.json())
