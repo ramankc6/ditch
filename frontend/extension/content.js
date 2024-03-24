@@ -17,7 +17,7 @@ function searchLinks () {
 
 function sendDataToServer(data) {
   console.log(data);
-  chrome.storage.sync.get(['userEmail', 'compName', 'compPhone', 'userPay'], function(storedData) {
+  chrome.storage.sync.get(['userEmail', 'companyName', 'phoneNumber', 'monthlyPayment'], function(storedData) {
     console.log(storedData);
     fetch('https://ditch.live:3000/api/getTOS', {
       method: 'POST',
