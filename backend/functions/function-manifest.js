@@ -3,6 +3,34 @@ const tools = [
   {
     type: 'function',
     function: {
+      name: 'getEmailAddress',
+      say: 'Just hold on a sec. I\'ll give you the email address in a moment.',
+      description: 'Simply send back the user\'s email address.',
+      parameters: {
+        type: 'object',
+        properties: {
+          model: {
+            type: 'string',
+            description: 'The prompt asking for the user\'s email address.',
+          },
+        },
+        required: ['model'],
+      },
+      returns: {
+        type: 'object',
+        properties: {
+          stock: {
+            type: 'string',
+            description: 'A string containing the user\'s email address.'
+          }
+        }
+      }
+    },
+  },
+
+  {
+    type: 'function',
+    function: {
       name: 'checkInventory',
       say: 'Let me check our inventory right now.',
       description: 'Check the inventory of airpods, airpods pro or airpods max.',

@@ -10,6 +10,8 @@ tools.forEach((tool) => {
   let functionName = tool.function.name;
   availableFunctions[functionName] = require(`./functions/${functionName}`);
 });
+console.log(typeof availableFunctions);
+console.log(availableFunctions);
 
 class GptService extends EventEmitter {
   constructor() {
