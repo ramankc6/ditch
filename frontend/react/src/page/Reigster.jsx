@@ -48,16 +48,7 @@ const Register = () => {
               className="w-full text-[#e8e5dc] border border-gray-300 rounded-md px-3 py-2 focus:outline-blue-500" 
             />
           </div>
-          <div className="mb-4"> 
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
-              required
-              className="w-full text-[#e8e5dc] border border-gray-300 rounded-md px-3 py-2 focus:outline-blue-500"
-            />
-          </div>
+          
           <div className="mb-4">          
             <input
               type="phone"
@@ -66,6 +57,16 @@ const Register = () => {
               placeholder="Phone Number"
               required
               className="w-full text-[#e8e5dc] border border-gray-300 rounded-md px-3 py-2 focus:outline-blue-500" 
+            />
+          </div>
+          <div className="mb-4"> 
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              required
+              className="w-full text-[#e8e5dc] border border-gray-300 rounded-md px-3 py-2 focus:outline-blue-500"
             />
           </div>
 
