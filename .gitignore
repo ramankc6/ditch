@@ -23,3 +23,5 @@ react-frontend/.env
 react/.env
 .env
 backend/hoohack-c24ae-firebase-adminsdk-jrhu8-e81b4ca042.json
+
+.venv
