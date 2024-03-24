@@ -63,7 +63,7 @@ app.post('/handle-call', (req, res) => {
     res.end(`
     <Response>
       <Connect>
-        <Stream url="wss://${process.env.SERVER}/connection" />
+        <Stream url="wss://ditch.live:3001/connection" />
       </Connect>
     </Response>
     `);
