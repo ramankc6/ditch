@@ -19,7 +19,7 @@ function sendDataToServer(data) {
   console.log(data);
   chrome.storage.sync.get(['userEmail', 'companyName', 'phoneNumber', 'monthlyPayment'], function(storedData) {
     console.log(storedData);
-    fetch('https://ditch.live:3000/api/getTOS', {
+    fetch(`https://${process.env.SERVER}/api/getTOS`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
