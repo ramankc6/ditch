@@ -23,3 +23,9 @@ react-frontend/.env
 react/.env
 
 node_modules
+
+.env
+
+ca_bundle.crt
+certificate.crt
+private.key

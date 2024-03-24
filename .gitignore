@@ -21,3 +21,4 @@ react-frontend/yarn-error.log*
 react-frontend/.env
 .DS_Store
 react/.env
+.env

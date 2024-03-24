@@ -16,6 +16,7 @@ const login = async (email, password) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password)
     return userCredential.user
   } catch (error) {
+    console.error('Login failed:', error.code, error.message);
     throw error
   }
 }

@@ -1,20 +1,39 @@
 const express = require('express');
+const ExpressWs = require('express-ws');
 const { Pool } = require('pg');
 const cors = require('cors');
 const app = express();
-const port = 3001;
+ExpressWs(app);
+const { exec } = require('child_process');
+const twilio = require('twilio');
+require('dotenv').config();
+const { StreamService } = require('./stream-service'); 
+const https = require('https')
+const fs = require('fs')
 
+const port = process.env.PORT;
 
 app.use(cors());
 app.use(express.json());
 
 const OpenAIApi = require('openai');
-
-
-
 const openai = new OpenAIApi.OpenAI({
-    apiKey: ""
+    apiKey: process.env.OPENAI_API_KEY
 });
+
+app.post('/api/getTOS', async (req, res) => {
+    console.log("getTOS called")
+    const {url} = req.body;
+
+    exec('python3 fetch_tos.py ' + url, async (error, stdout, stderr) => {
+        if (error) {
+            console.error(`exec error: ${error}`);
+            return res.status(500).send('Server error');
+        }
+        console.log(stdout)
+        res.json(stdout)
+    })
+})
 
 app.get('/api/summurizeTOS', async (req, res) => {
     const {tos} = req.body;
@@ -33,6 +52,23 @@ app.get('/api/summurizeTOS', async (req, res) => {
     }
 })
 
-app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-});
+app.post('/handle-call', (req, res) => {
+    const twiml = new twilio.twiml.VoiceResponse();
+
+    twiml.say('Server is working.');
+    twiml.hangup();
+
+    res.type('text/xml');
+    res.send(twiml.toString());
+  });
+
+const privateKey = fs.readFileSync('private.key', 'utf8')
+
+const certificate = fs.readFileSync('certificate.crt', 'utf8')
+
+const caBundle = fs.readFileSync('ca_bundle.crt', 'utf8')
+
+const credentials = {key: privateKey, cert: certificate, ca: caBundle}
+const server = https.createServer(credentials, app)
+
+server.listen(port, console.log(`Server started on port ${port}`))
