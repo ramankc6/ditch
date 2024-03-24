@@ -8,6 +8,9 @@ const { exec } = require('child_process');
 const twilio = require('twilio');
 require('dotenv').config();
 const { StreamService } = require('./stream-service'); 
+const { TranscriptionService } = require('./transcription-service');
+const { TextToSpeechService } = require('./tts-service');
+const { GptService } = require('./gpt-service');
 const https = require('https')
 const fs = require('fs')
 const { Deepgram } = require('@deepgram/sdk');
@@ -55,63 +58,88 @@ app.get('/api/summurizeTOS', async (req, res) => {
 })
 
 app.post('/handle-call', (req, res) => {
-    console.log('handle-call called')
-    const twiml = new twilio.twiml.VoiceResponse();
-
-    twiml.say('Server is working.');
-
-    const stream = twiml.connect().stream({
-        url: `wss://ditch.live:3001/connection`,
-    });
-
+    res.status(200);
     res.type('text/xml');
-    res.send(twiml.toString());
+    res.end(`
+    <Response>
+      <Connect>
+        <Stream url="wss://${process.env.SERVER}/connection" />
+      </Connect>
+    </Response>
+    `);
   });
 
-app.ws('/connection', (ws) => {
+  app.ws('/connection', (ws) => {
+    ws.on('error', console.error);
+    // Filled in from start message
+    let streamSid;
+    let callSid;
+  
+    const gptService = new GptService();
     const streamService = new StreamService(ws);
-    const deepgram = new Deepgram(process.env.DEEPGRAM_API_KEY);
-    const ttsClient = new textToSpeech.textToSpeechClient();
-
+    const transcriptionService = new TranscriptionService();
+    const ttsService = new TextToSpeechService({});
+    
+    let marks = [];
+    let interactionCount = 0;
+  
+    // Incoming from MediaStream
     ws.on('message', function message(data) {
-        if (msg.event === 'start') {
-            streamSid = msg.start.streamSid;
-            streamService.setStreamSid(streamSid);
-            console.log(`Twilio -> Starting Media Stream for ${streamSid}`);
-        }
-        else if (msg.event === 'media') {
-            deepgram.transcription.live({
-                encoding: 'mulaw', // Audio encoding format (e.g., 'mulaw', 'linear16')
-                sample_rate: 8000, // Audio sample rate (e.g., 8000, 16000)
-                model: 'phone_call', // Transcription model to use (e.g., 'general', 'nova-2')
-                punctuate: true, // Whether to include punctuation in the transcript
-                interim_results: true, // Whether to receive interim (partial) transcription results
-                endpointing: 300, // Endpointing sensitivity (higher values = more sensitive)
-                utterance_end_ms: 1500
-            })
-            .on('transcriptReceived', async (transcription)=> {
-                const text = transcription.channel.alternatives[0].transcript;
-
-                if (text.toLowerCase().includes('apple')){
-
-                    const request = {
-                        input: {text: 'Secret phrase recognized'},
-                        voice: { languageCode: 'en-US', ssmlGender: 'FEMALE'},
-                        audioConfig: {audioEncoding: 'MP3'},
-                    }
-
-                    const [response] = await ttsClient.synthesizeSpeech(request);
-                    const audio = response.audioContent
-
-                    streamService.sendAudio(audio.toString('base64'));
-                }
-            })
-        }
-        else if (msg.event === 'stop') {
-            console.log(`Twilio -> Media stream ${streamSid} ended.`);
-        }
-    })
-})
+      const msg = JSON.parse(data);
+      if (msg.event === 'start') {
+        streamSid = msg.start.streamSid;
+        callSid = msg.start.callSid;
+        streamService.setStreamSid(streamSid);
+        gptService.setCallSid(callSid);
+        console.log(`Twilio -> Starting Media Stream for ${streamSid}`.underline.red);
+        ttsService.generate({partialResponseIndex: null, partialResponse: 'Hello! I understand you\'re looking for a pair of AirPods, is that correct?'}, 1);
+      } else if (msg.event === 'media') {
+        transcriptionService.send(msg.media.payload);
+      } else if (msg.event === 'mark') {
+        const label = msg.mark.name;
+        console.log(`Twilio -> Audio completed mark (${msg.sequenceNumber}): ${label}`.red);
+        marks = marks.filter(m => m !== msg.mark.name);
+      } else if (msg.event === 'stop') {
+        console.log(`Twilio -> Media stream ${streamSid} ended.`.underline.red);
+      }
+    });
+  
+    transcriptionService.on('utterance', async (text) => {
+      // This is a bit of a hack to filter out empty utterances
+      if(marks.length > 0 && text?.length > 5) {
+        console.log('Twilio -> Interruption, Clearing stream'.red);
+        ws.send(
+          JSON.stringify({
+            streamSid,
+            event: 'clear',
+          })
+        );
+      }
+    });
+  
+    transcriptionService.on('transcription', async (text) => {
+      if (!text) { return; }
+      console.log(`Interaction ${interactionCount} – STT -> GPT: ${text}`.yellow);
+      gptService.completion(text, interactionCount);
+      interactionCount += 1;
+    });
+    
+    gptService.on('gptreply', async (gptReply, icount) => {
+      console.log(`Interaction ${icount}: GPT -> TTS: ${gptReply.partialResponse}`.green );
+      ttsService.generate(gptReply, icount);
+    });
+  
+    ttsService.on('speech', (responseIndex, audio, label, icount) => {
+      console.log(`Interaction ${icount}: TTS -> TWILIO: ${label}`.blue);
+  
+      streamService.buffer(responseIndex, audio);
+    });
+  
+    streamService.on('audiosent', (markLabel) => {
+      marks.push(markLabel);
+    });
+  });
+  
 const privateKey = fs.readFileSync('private.key', 'utf8')
 
 const certificate = fs.readFileSync('certificate.crt', 'utf8')
