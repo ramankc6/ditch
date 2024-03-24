@@ -5,14 +5,14 @@
   to your own mobile phone.
 */
 
-require('dotenv').config();
+require('dotenv').config()
 
-async function makeOutBoundCall() {
-  const accountSid = process.env.TWILIO_ACCOUNT_SID;
-  const authToken = process.env.TWILIO_AUTH_TOKEN;
-  
-  const client = require('twilio')(accountSid, authToken);
-  send_url = `https://${process.env.SERVER}/incoming`
+async function makeOutBoundCall (userName, userPhone, userEmail, subscription) {
+  const accountSid = process.env.TWILIO_ACCOUNT_SID
+  const authToken = process.env.TWILIO_AUTH_TOKEN
+
+  const client = require('twilio')(accountSid, authToken)
+  send_url = `https://${process.env.SERVER}/incoming?userName=${userName}&userPhone=${userPhone}&userEmail=${userEmail}&companyName=${subscription.companyName}&monthlyPayment=${subscription.monthlyPayment}&comment=${subscription.comment}`
 
   console.log(send_url)
   await client.calls
@@ -21,7 +21,9 @@ async function makeOutBoundCall() {
       to: process.env.TO_NUMBER,
       from: process.env.FROM_NUMBER
     })
-    .then(call => console.log(`SID of Outbound Call: ${call.sid}` ));
+    .then(call => console.log(`SID of Outbound Call: ${call.sid}`))
 }
 
-makeOutBoundCall();
+// makeOutBoundCall();
+
+exports.makeOutBoundCall = makeOutBoundCall
