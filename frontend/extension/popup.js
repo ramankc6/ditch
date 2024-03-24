@@ -6,8 +6,11 @@ document.addEventListener('DOMContentLoaded', function () {
     event.preventDefault(); 
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const payment = document.getElementById('payment').value;
+  
 
-    chrome.storage.sync.set({ userName: name, userEmail: email }, function() {
+    chrome.storage.sync.set({ uuserEmail: email, compName: name, compPhone: phone, userPay: payment}, function() {
       infoForm.style.display = 'none';
 
       // Start Link Finding Logic
