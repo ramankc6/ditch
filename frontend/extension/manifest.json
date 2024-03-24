@@ -5,15 +5,14 @@
   "permissions": [
     "activeTab",
     "storage",
-    "notifications",
-    "<all_urls>"
+    "notifications"
+   
   ],
   "background": {
     "service_worker": "background.js"
   },
   "action": {
     "default_popup": "popup.html",
-    // "default_popup": "./build/index.html",
     "default_width": 400,
     "default_height": 600,
     "default_icon": {
