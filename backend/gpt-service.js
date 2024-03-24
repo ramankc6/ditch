@@ -1,11 +1,15 @@
 require('colors');
 const EventEmitter = require('events');
 const OpenAI = require('openai');
+const tools = require('./functions/function-manifest');
 
 // Import all functions included in function manifest
 // Note: the function name and file name must be the same
 const availableFunctions = {};
-
+tools.forEach((tool) => {
+  let functionName = tool.function.name;
+  availableFunctions[functionName] = require(`./functions/${functionName}`);
+});
 
 class GptService extends EventEmitter {
   constructor() {
@@ -51,6 +55,7 @@ class GptService extends EventEmitter {
     const stream = await this.openai.chat.completions.create({
       model: 'gpt-4-1106-preview',
       messages: this.userContext,
+      tools: tools,
       stream: true,
     });
 
@@ -92,6 +97,8 @@ class GptService extends EventEmitter {
         
         // Say a pre-configured message from the function manifest
         // before running the function.
+        const toolData = tools.find(tool => tool.function.name === functionName);
+        const say = toolData.function.say;
 
         this.emit('gptreply', {
           partialResponseIndex: null,
