@@ -22,7 +22,7 @@ app.use(cors())
 app.use(express.json())
 
 const OpenAIApi = require('openai')
-const { verifyEmailAndPassword, initializeFirebase } = require('./firebase-service')
+const { verifyEmailAndPassword, initializeFirebase, addSubscription } = require('./firebase-service')
 const openai = new OpenAIApi.OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 })
@@ -57,7 +57,9 @@ const summarizeTOS = async (tos) => {
 
 app.post('/api/getTOS', async (req, res) => {
   console.log("getTOS called")
-  const { email, url } = req.body
+  const { userEmail, url, compName, compPhone, userPay } = req.body
+  const subscription = { url, compName, compPhone, userPay }
+  console.log("subscription", subscription)
 
   exec('python3 fetch_tos.py ' + url, async (error, stdout, stderr) => {
     if (error) {
@@ -66,7 +68,8 @@ app.post('/api/getTOS', async (req, res) => {
     }
     console.log(stdout)
     const sum = await summarizeTOS(stdout)
-    addTOS(email, sum)
+    subscription.summary = sum
+    addSubscription(email, subscription)
     res.json(sum)
   })
 })
@@ -81,6 +84,7 @@ app.get('/api/summurizeTOS', async (req, res) => {
     })
     const aiResponse = response.choices[0].message.content
     console.log(aiResponse)
+
     res.json(aiResponse)
   } catch (error) {
     console.error('Failed to send message', error)
