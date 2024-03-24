@@ -143,7 +143,7 @@ app.ws('/connection', (ws, req) => {
       console.log(`Twilio -> Starting Media Stream for ${streamSid}`.underline.red)
 
 
-      ttsService.generate({ partialResponseIndex: null, partialResponse: `Hello! I\'d like to get some help with cancelling my current subscription to ${companyName}.` }, 1)
+      ttsService.generate({ partialResponseIndex: null, partialResponse: `Hello! I\'d like to get some help with cancelling my current subscription.` }, 1)
 
     } else if (msg.event === 'media') {
       // console.log("media")
