@@ -63,14 +63,14 @@ const SubscriptionCard = ({ subscription, handleRemoveSubscription }) => {
           <div className="flex items-center gap-3 mt-1 flex-row">
             <div className="flex items-center gap-3 mt-1 justify-left">
               <button
-                onClick={() => window.open(`tel:${subscription.phoneNumber}`)}
+                onClick={() => cancelSubscription(subscription)}
                 className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-lg">
                 Cancel with AI
               </button>
             </div>
             <div className="flex items-center gap-3 mt-1 justify-right">
               <button
-                onClick={() => cancelSubscription(subscription)}
+                onClick={() => handleRemoveSubscription(subscription)}
                 className="bg-red-500 hover:bg-red-700 text-white px-3 py-1 rounded-lg">
                 Delete
               </button>
