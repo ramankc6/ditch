@@ -70,6 +70,7 @@ app.post('/handle-call', (req, res) => {
   });
 
   app.ws('/connection', (ws) => {
+    console.log("made it to connection")
     ws.on('error', console.error);
     // Filled in from start message
     let streamSid;
