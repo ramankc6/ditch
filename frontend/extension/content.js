@@ -27,9 +27,9 @@ function sendDataToServer(data) {
       body: JSON.stringify({ 
           "url": data.links[0], 
           "userEmail": storedData.userEmail,
-          "companyName": storedData.compName,
-          "phoneNumber": storedData.compPhone,
-          "monthlyPayment": storedData.userPay
+          "companyName": storedData.companyName,
+          "phoneNumber": storedData.phoneNumber,
+          "monthlyPayment": storedData.monthlyPayment
       })
     })
     .then(response => response.json())

@@ -1,6 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
   const infoForm = document.getElementById('infoForm');
   const resultsDiv = document.getElementById('results'); // Assuming you have this in your HTML
+  const ditchImage = document.getElementById('ditch-logo'); 
+
+  ditchImage.addEventListener('click', () => {
+    chrome.tabs.create({ url: "https://www.ditch.live" });
+  });
 
   infoForm.addEventListener('submit', function(event) {
     event.preventDefault(); 
