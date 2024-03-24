@@ -64,11 +64,21 @@ app.post('/api/getTOS', async (req, res) => {
       console.error(`exec error: ${error}`)
       return res.status(500).send('Server error')
     }
-    // console.log(stdout)
-    const sum = await summarizeTOS(stdout)
-    subscription.comment = sum
-    addSubscription(userEmail, subscription)
-    res.json(sum)
+    // If not an error, proceed to process stdout
+    try {
+      const sum = await summarizeTOS(stdout)
+      subscription.comment = sum
+      // Handle addSubscription properly
+      await addSubscription(userEmail, subscription).catch(e => {
+        console.error(`Error adding subscription: ${e}`)
+        // Respond with an error message or handle accordingly
+        // Not sending a response here since you might want to handle it differently
+      })
+      res.json(sum) // Respond with the summary if everything is successful
+    } catch (e) {
+      console.error(`Error summarizing terms of service: ${e}`)
+      res.status(500).send('Server error')
+    }
   })
 })
 

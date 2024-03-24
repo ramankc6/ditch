@@ -11,12 +11,18 @@ const initializeFirebase = () => {
 }
 
 const addSubscription = async (email, subscription) => {
-  const db = admin.firestore()
-  const userRecord = await admin.auth().getUserByEmail(email)
-  const userId = userRecord.uid
-  const docRef = db.collection('users').doc(userId)
-  console.log("Adding subscription", subscription)
-  await docRef.set({ subscriptions: admin.firestore.FieldValue.arrayUnion(subscription) })
+  try {
+    const db = admin.firestore()
+    const userRecord = await admin.auth().getUserByEmail(email)
+    const userId = userRecord.uid
+    const docRef = db.collection('users').doc(userId)
+    console.log("Adding subscription", subscription)
+    await docRef.set({ subscriptions: admin.firestore.FieldValue.arrayUnion(subscription) })
+
+  } catch (error) {
+    console.error("Error adding subscription", error)
+    throw error
+  }
 }
 
 const addTOS = async (email, TOS) => {
