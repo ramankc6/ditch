@@ -8,6 +8,8 @@ import { StarCanvas } from '../component/canvas'
 const Register = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [ name, setName ] = useState('') // Add name state
+  const [ phone, setPhone ] = useState('') // Add phone state
   const [message, setMessage] = useState(null); // For success or error
   const [messageType, setMessageType] = useState(null); // 'success' or 'error'
 
@@ -15,7 +17,7 @@ const Register = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
-      const user = await authService.register(email, password)
+      const user = await authService.register(email, password, name, phone)
       console.log('User registered:', user)
       setMessage('Registration successful!');
       setMessageType('success');
@@ -33,7 +35,19 @@ const Register = () => {
       <div className="bg-white p-8 rounded-lg shadow-md w-96"> {/* Card container */}
         <h2 className="text-2xl text-secondary font-bold mb-4">Register</h2>
 
+
         <form onSubmit={handleSubmit}>
+
+        <div className="mb-4">          
+            <input
+              type="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Name"
+              required
+              className="w-full text-[#e8e5dc] border border-gray-300 rounded-md px-3 py-2 focus:outline-blue-500" 
+            />
+          </div>
           <div className="mb-4"> 
             <input
               type="email"
@@ -42,6 +56,16 @@ const Register = () => {
               placeholder="Email"
               required
               className="w-full text-[#e8e5dc] border border-gray-300 rounded-md px-3 py-2 focus:outline-blue-500"
+            />
+          </div>
+          <div className="mb-4">          
+            <input
+              type="phone"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="Phone Number"
+              required
+              className="w-full text-[#e8e5dc] border border-gray-300 rounded-md px-3 py-2 focus:outline-blue-500" 
             />
           </div>
 
