@@ -14,7 +14,7 @@ ExpressWs(app);
 const PORT = process.env.PORT || 3000;
 
 app.post('/incoming', (req, res) => {
-  console.log("inc running")
+  // console.log("inc running")
   res.status(200);
   res.type('text/xml');
   res.end(`
@@ -27,27 +27,27 @@ app.post('/incoming', (req, res) => {
 });
 
 app.ws('/connection', (ws) => {
-  console.log("hey")
+  // console.log("hey")
   ws.on('error', console.error);
-  console.log("1")
+  // console.log("1")
   // Filled in from start message
   let streamSid;
   let callSid;
-  console.log("2")
+  // console.log("2")
   const gptService = new GptService();
-  console.log("3")
+  // console.log("3")
   const streamService = new StreamService(ws);
-  console.log("4")
+  // console.log("4")
   const transcriptionService = new TranscriptionService();
-  console.log("5")
+  // console.log("5")
   const ttsService = new TextToSpeechService({});
-  console.log("hey2")
+  // console.log("hey2")
   let marks = [];
   let interactionCount = 0;
 
   // Incoming from MediaStream
   ws.on('message', function message(data) {
-    console.log("hey3")
+    // console.log("hey3")
     const msg = JSON.parse(data);
     if (msg.event === 'start') {
       streamSid = msg.start.streamSid;
@@ -57,7 +57,7 @@ app.ws('/connection', (ws) => {
       console.log(`Twilio -> Starting Media Stream for ${streamSid}`.underline.red);
       ttsService.generate({partialResponseIndex: null, partialResponse: 'Hello! I understand you\'re looking for a pair of AirPods, is that correct?'}, 1);
     } else if (msg.event === 'media') {
-      console.log("media")
+      // console.log("media")
       transcriptionService.send(msg.media.payload);
     } else if (msg.event === 'mark') {
       const label = msg.mark.name;
