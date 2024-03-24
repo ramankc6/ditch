@@ -15,7 +15,7 @@ async function makeOutBoundCall() {
 
   await client.calls
     .create({
-      url: `https://ditch.live:3001/handle-call`,
+      url: `https://127.0.0.1:3001/handle-call`,
       to: process.env.TO_NUMBER,
       from: process.env.FROM_NUMBER,
       
