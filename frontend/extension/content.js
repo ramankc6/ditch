@@ -26,11 +26,10 @@ function sendDataToServer(data) {
       },
       body: JSON.stringify({ 
           "url": data.links[0], 
-          "userName": storedData.userName,
           "userEmail": storedData.userEmail,
-          "compName": storedData.compName,
-          "compPhone": storedData.compPhone,
-          "userPay": storedData.userPay
+          "companyName": storedData.compName,
+          "phoneNumber": storedData.compPhone,
+          "monthlyPayment": storedData.userPay
       })
     })
     .then(response => response.json())

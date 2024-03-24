@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const payment = document.getElementById('payment').value;
   
 
-    chrome.storage.sync.set({ uuserEmail: email, compName: name, compPhone: phone, userPay: payment}, function() {
+    chrome.storage.sync.set({ userEmail: email, companyName: name, phoneNumber: phone, monthlyPayment: payment}, function() {
       infoForm.style.display = 'none';
 
       // Start Link Finding Logic
