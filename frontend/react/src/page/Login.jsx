@@ -62,7 +62,7 @@ const Login = () => {
           >
             <div className="mb-4">
               <label for="username" class="block text-background">Username:</label>
-              <input type="text" id="username" name="username" value={email} onChange={(e) => {
+              <input type="text" id="username" className="w-full border border-gray-300 rounded px-3 py-2" name="username" value={email} onChange={(e) => {
                   e.stopPropagation(); // Prevent event bubbling up
                   setEmail(e.target.value); 
               }}  />
