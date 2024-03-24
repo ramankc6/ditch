@@ -19,7 +19,13 @@ function sendDataToServer(data) {
   console.log(data);
   chrome.storage.sync.get(['userEmail', 'companyName', 'phoneNumber', 'monthlyPayment'], function(storedData) {
     console.log(storedData);
-    fetch(`https://${process.env.SERVER}/api/getTOS`, {
+    console.log(data.links[0]);
+    console.log(storedData.userEmail);
+    console.log(storedData.companyName);
+    console.log(storedData.phoneNumber);
+    console.log(storedData.monthlyPayment);
+    fetch(`https://a0d9-18-117-221-234.ngrok-free.app/api/getTOS`, {
+      mode: 'no-cors',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
