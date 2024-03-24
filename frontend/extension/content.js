@@ -17,17 +17,19 @@ function searchLinks () {
 
 function sendDataToServer(data) {
   console.log(data);
-  chrome.storage.sync.get(['userName', 'userEmail'], function(storedData) {
+  chrome.storage.sync.get(['userEmail', 'companyName', 'phoneNumber', 'monthlyPayment'], function(storedData) {
     console.log(storedData);
-    fetch('https://ditch.live:3001/api/getTOS', {
+    fetch('https://ditch.live:3000/api/getTOS', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ 
           "url": data.links[0], 
-          "userName": storedData.userName,
-          "userEmail": storedData.userEmail
+          "userEmail": storedData.userEmail,
+          "companyName": storedData.companyName,
+          "phoneNumber": storedData.phoneNumber,
+          "monthlyPayment": storedData.monthlyPayment
       })
     })
     .then(response => response.json())

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <link rel="stylesheet" href="popup.css">
   <title>Link Finder - User Info</title>
   <style>
     body {
@@ -13,14 +14,26 @@
   </style>
 </head>
 <body>
+  <a href="#" id="ditch-logo"> <img src="./images/Ditch.png" alt="Link Finder Logo" width="100">
+  </a>
+  <h1>Ditch Autofill</h1>
   <form id="infoForm">
-    <div>
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" required>
-    </div>
+    
     <div>
       <label for="email">Email:</label>
       <input type="email" id="email" name="email" required>
+    </div>
+    <div>
+      <label for="name">Company Name:</label>
+      <input type="text" id="name" name="name" required>
+    </div>
+    <div>
+      <label for="phone">Company Phone:</label>
+      <input type="tel" id="phone" name="phone" required>
+    </div>
+    <div>
+      <label for="payment">Monthly Payment:</label>
+      <input type="number" id="payment" name="payment" required>
     </div>
     <button type="submit">Submit</button>
   </form>

@@ -1,4 +1,18 @@
 // Variables (optional, for demonstration)
+@keyframes slideIn {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.slide-in-text {
+  display: inline-block; /* Needed to apply transform */
+  animation: slideIn 3s linear infinite;
+}
+
 .login-container {
   $color-accent: #32ff7e;
   $color-shadow: #00fff0;

@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, sans-serif; /* A common, clean font choice */
+    width: 350px; /* Adjust the width if needed */
+    padding: 20px;
+    box-sizing: border-box; /* Prevent padding from adding to total width */
+    background-color: #fcb711;
+  }
+  
+  #infoForm {
+    margin-bottom: 20px; 
+  }
+  
+  #infoForm label {
+    display: block; /* Makes labels stack neatly */
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  #infoForm input {
+    width: 100%; 
+    padding: 8px; 
+    margin-bottom: 10px; 
+    border: 1px solid #ccc;
+    border-radius: 4px; 
+    box-sizing: border-box; 
+  }
+  
+  button[type="submit"] {
+    background-color: #3090f0; /* A pleasant green color */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #2470d3; /* A slightly darker green on hover */
+  } 
+  
+  #results {
+    /* Style your results display later as needed */
+  } 
+  

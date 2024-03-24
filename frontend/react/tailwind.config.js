@@ -11,7 +11,7 @@ module.exports = {
         // 'primary': '#2D87C6',
         // 'background': '#FFF8E7',
         // 'secondary': '#001F3F',
-        'accent': '#fcb711',
+        accent: '#fcb711',
         // 'tertiary': '#F7931B',
        },       
       boxShadow: {
