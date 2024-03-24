@@ -6,8 +6,11 @@ const EventEmitter = require('events');
 
 class TranscriptionService extends EventEmitter {
   constructor() {
+    console.log('transcript-service called')
     super();
+    console.log(process.env.DEEPGRAM_API_KEY)
     const deepgram = new Deepgram(process.env.DEEPGRAM_API_KEY);
+    console.log('API key good')
     this.deepgramLive = deepgram.transcription.live({
       encoding: 'mulaw',
       sample_rate: '8000',
@@ -18,10 +21,12 @@ class TranscriptionService extends EventEmitter {
       utterance_end_ms: 1000
     });
 
+    console.log('post-constroctor')
     this.finalResult = '';
     this.speechFinal = false; // used to determine if we have seen speech_final=true indicating that deepgram detected a natural pause in the speakers speech. 
-
+    console.log('abiut to add listener')
     this.deepgramLive.addListener('transcriptReceived', (transcriptionMessage) => {
+      console.log('inside listener')
       const transcription = JSON.parse(transcriptionMessage);
       const alternatives = transcription.channel?.alternatives;
       let text = '';
@@ -40,7 +45,7 @@ class TranscriptionService extends EventEmitter {
           return;
         }
       }
-
+      console.log("b4 final")
       // console.log(text, "is_final: ", transcription?.is_final, "speech_final: ", transcription.speech_final);
       // if is_final that means that this chunk of the transcription is accurate and we need to add it to the finalResult 
       if (transcription.is_final === true && text.trim().length > 0) {
