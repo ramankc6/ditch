@@ -19,27 +19,27 @@ class GptService extends EventEmitter {
     super()
     this.openai = new OpenAI()
 
-    // const userFullName = "Sriniketh Vangaru"
-    // const userEmailAddress = "niketh.vangaru@gmail.com"
-    // const userPhoneNumber = "(123) 456-7899"
+    const userFullName = "Sriniketh Vangaru"
+    const userEmailAddress = "niketh.vangaru@gmail.com"
+    const userPhoneNumber = "(123) 456-7899"
 
-    // const companyName = "Netflix"
-    // const summaryOfTOS = "Netflix Cancellation Summary: Cancelling your Netflix membership is straightforward and can be done at any time. You will retain access to the service until the end of your current billing period, but no refunds are offered for partially used periods. To cancel, simply navigate to the \"Account\" page on netflix.com and follow the instructions provided. If you subscribed through a third-party, cancellation may need to be completed through their platform instead. Your account will automatically close at the end of your current billing period. You can verify the closure date by checking the \"Billing details\" section within your \"Account\" page. Should you encounter any difficulties or have further questions, the Netflix Help Center offers comprehensive information and assistance."
+    const companyName = "Netflix"
+    const summaryOfTOS = "Netflix Cancellation Summary: Cancelling your Netflix membership is straightforward and can be done at any time. You will retain access to the service until the end of your current billing period, but no refunds are offered for partially used periods. To cancel, simply navigate to the \"Account\" page on netflix.com and follow the instructions provided. If you subscribed through a third-party, cancellation may need to be completed through their platform instead. Your account will automatically close at the end of your current billing period. You can verify the closure date by checking the \"Billing details\" section within your \"Account\" page. Should you encounter any difficulties or have further questions, the Netflix Help Center offers comprehensive information and assistance."
 
-    const userFullName = query.userName
-    const userEmailAddress = query.userEmail
-    const userPhoneNumber = query.userPhone
-    const companyName = query.companyName
-    const summaryOfTOS = query.comment
+    // const userFullName = query.userName
+    // const userEmailAddress = query.userEmail
+    // const userPhoneNumber = query.userPhone
+    // const companyName = query.companyName
+    // const summaryOfTOS = query.comment
     console.log("query", query)
     const contentUser = "You're playing the role of a person with the name " + userFullName + ", a customer trying to cancel their subscription to " + companyName + "}. You'll talk in first person as if you're speaking directly to a customer service representative. You have " + userFullName + "'s personal details, including his name " + userFullName + ", email (" + userEmailAddress + "), and phone number (" + userPhoneNumber + "). You're also familiar with " + companyName + "}'s cancellation policy as summarized from their terms of service. The summary is as follows: " + summaryOfTOS +
-      + "You'll use this information to convincingly portray a customer navigating the cancellation process, and your goal is to cancel ${userFullName}'s subscription to " + companyName + " by talking to the customer service rep." +
-      + "You have a youthful and cheery personality. Keep your responses as brief as possible but make every attempt to keep the caller on the phone without being rude. Don\'t ask more than 1 question at a time. Don\'t make assumptions about what values to plug into functions. Ask for clarification if a request from the company representative is ambiguous. Speak out all prices to include the currency when discussing these subscription plans. You must add a \'•\' symbol every 5 to 10 words at natural pauses where your response can be split for text to speech."
+      + "You'll use this information to convincingly portray a customer navigating the cancellation process, and your goal is to cancel " + userFullName + "'s subscription to " + companyName + " by talking to the customer service rep." +
+      + "You have a youthful and cheery personality. Keep your responses as brief as possible but make every attempt to keep the caller on the phone without being rude. Don\'t ask more than 1 question at a time. Don\'t make assumptions about what values to plug into functions. Ask for clarification if a request from the company representative is ambiguous. Speak out all prices to include the currency when discussing these subscription plans. You must add a \'•\' symbol every 5 to 10 words at natural pauses where your response can be split for text to speech. Add umms and mhmms to sound more natural. Also frequently apologize for the wait"
     this.userContext = [
       {
         'role': 'system', 'content': contentUser
       },
-      // { 'role': 'assistant', 'content': `Hello! My name is ${userFullName}, and I\'d like to get some help with cancelling my current subscription to ${companyName}.` },
+      { 'role': 'assistant', 'content': `Hello! My name is ${userFullName}, and I\'d like to get some help with cancelling my current subscription to ${companyName}.` },
     ],
       this.partialResponseIndex = 0
     console.log(this.userContext)
