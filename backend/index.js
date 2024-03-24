@@ -58,7 +58,7 @@ const summarizeTOS = async (tos) => {
 app.post('/api/getTOS', async (req, res) => {
   const { userEmail, url, companyName, phoneNumber, monthlyPayment } = req.body
   const subscription = { url, companyName, phoneNumber, monthlyPayment }
-
+  console.log(subscription)
   exec('python3 fetch_tos.py ' + url, async (error, stdout, stderr) => {
     if (error) {
       console.error(`exec error: ${error}`)
