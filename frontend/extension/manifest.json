@@ -12,7 +12,10 @@
     "service_worker": "background.js"
   },
   "action": {
-    "default_popup": "popup.html",
+    // "default_popup": "popup.html",
+    "default_popup": "./build/index.html",
+    "default_width": 400,
+    "default_height": 600,
     "default_icon": {
       "16": "images/icon16.png",
       "48": "images/icon48.png",

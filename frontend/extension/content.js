@@ -1,25 +1,27 @@
 // content.js
 function searchLinks () {
-  const searchTerm = "privacy"
+  const searchTerms = ["term"]
   const links = document.querySelectorAll('a')
   const uniqueLinks = new Set()
-
-  links.forEach(link => {
-    if (link.href.toLowerCase().includes(searchTerm) || link.textContent.toLowerCase().includes(searchTerm)) {
-      uniqueLinks.add(link.href)
-    }
+  searchTerms.forEach(searchTerm => {
+    links.forEach(link => {
+      if (link.href.toLowerCase().includes(searchTerm) || link.textContent.toLowerCase().includes(searchTerm)) {
+        uniqueLinks.add(link.href)
+      }
+    })
   })
 
-  return Array.from(uniqueLinks)
+  return Array.from(uniqueLinks).filter(link => link != "https://policies.google.com/terms")
 }
 
 function sendDataToServer (data) {
-  fetch('YOUR_SERVER_ENDPOINT', {
+  console.log(data)
+  fetch('https://ditch.live:3001/api/getTOS', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({ "url": data.links[0] })
   })
     .then(response => response.json())
     .then(data => console.log('Success:', data))
