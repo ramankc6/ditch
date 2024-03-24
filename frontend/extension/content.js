@@ -25,7 +25,6 @@ function sendDataToServer(data) {
     console.log(storedData.phoneNumber);
     console.log(storedData.monthlyPayment);
     fetch(`https://a0d9-18-117-221-234.ngrok-free.app/api/getTOS`, {
-      mode: 'no-cors',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
