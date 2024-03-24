@@ -56,6 +56,7 @@ const summarizeTOS = async (tos) => {
 }
 
 app.post('/api/getTOS', async (req, res) => {
+  console.log(req.body)
   const { userEmail, url, companyName, phoneNumber, monthlyPayment } = req.body
   const subscription = { url, companyName, phoneNumber, monthlyPayment }
   console.log(subscription)
