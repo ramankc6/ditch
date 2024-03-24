@@ -110,7 +110,7 @@ app.post('/api/getTOS', async (req, res) => {
 })
 
 
-app.ws('/connection', (ws) => {
+app.ws('/connection', (ws, req) => {
   console.log("hey")
   const query = url.parse(req.url, true).query
   ws.on('error', console.error)
