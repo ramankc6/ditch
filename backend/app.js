@@ -55,7 +55,15 @@ app.ws('/connection', (ws) => {
       streamService.setStreamSid(streamSid);
       gptService.setCallSid(callSid);
       console.log(`Twilio -> Starting Media Stream for ${streamSid}`.underline.red);
-      ttsService.generate({partialResponseIndex: null, partialResponse: 'Hello! I understand you\'re looking for a pair of AirPods, is that correct?'}, 1);
+
+      const userFullName = "Sriniketh Vangaru";
+      const userEmailAddress = "niketh.vangaru@gmail.com";
+      const userPhoneNumber = "(123) 456-7899";
+      const companyName = "Netflix";
+      const summaryOfTOS = "Netflix Cancellation Summary: Cancelling your Netflix membership is straightforward and can be done at any time. You will retain access to the service until the end of your current billing period, but no refunds are offered for partially used periods. To cancel, simply navigate to the \"Account\" page on netflix.com and follow the instructions provided. If you subscribed through a third-party, cancellation may need to be completed through their platform instead. Your account will automatically close at the end of your current billing period. You can verify the closure date by checking the \"Billing details\" section within your \"Account\" page. Should you encounter any difficulties or have further questions, the Netflix Help Center offers comprehensive information and assistance.";
+
+      ttsService.generate({partialResponseIndex: null, partialResponse: `Hello! My name is ${userFullName}, and I\'d like to get some help with cancelling my current subscription to ${companyName}.` }, 1);
+    
     } else if (msg.event === 'media') {
       // console.log("media")
       transcriptionService.send(msg.media.payload);
