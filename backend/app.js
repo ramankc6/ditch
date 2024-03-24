@@ -14,7 +14,7 @@ ExpressWs(app);
 const PORT = process.env.PORT || 3000;
 
 app.post('/incoming', (req, res) => {
-  // console.log("inc running")
+  console.log("inc running")
   res.status(200);
   res.type('text/xml');
   res.end(`
@@ -27,7 +27,7 @@ app.post('/incoming', (req, res) => {
 });
 
 app.ws('/connection', (ws) => {
-  // console.log("hey")
+  console.log("hey")
   ws.on('error', console.error);
   // console.log("1")
   // Filled in from start message
