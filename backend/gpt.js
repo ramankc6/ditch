@@ -66,7 +66,7 @@ class GptService extends EventEmitter {
     const stream = await this.openai.chat.completions.create({
       model: 'gpt-4-1106-preview',
       messages: this.userContext,
-      tools: tools,
+      // tools: tools,
       stream: true,
     });
 
