@@ -36,15 +36,15 @@ const SubscriptionCard = ({ subscription, handleRemoveSubscription }) => {
           </div>
 
           {/* Buttons */}
-          <div className="flex items-center gap-3 mt-4 flex-row">
-            <div className="flex items-center gap-3 mt-4 justify-left">
+          <div className="flex items-center gap-3 mt-1 flex-row">
+            <div className="flex items-center gap-3 mt-1 justify-left">
               <button
                 onClick={() => window.open(`tel:${subscription.phoneNumber}`)}
                 className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-lg">
                 Cancel with AI
               </button>
             </div>
-            <div className="flex items-center gap-3 mt-4 justify-right">
+            <div className="flex items-center gap-3 mt-1 justify-right">
               <button
                 onClick={() => handleRemoveSubscription(subscription)}
                 className="bg-red-500 hover:bg-red-700 text-white px-3 py-1 rounded-lg">
@@ -177,7 +177,7 @@ const SubscriptionTable = () => {
         </form>
       </div>
 
-      <div className="flex flex-wrap gap-4 mt-8 overflow-y-auto max-h-[500px]">
+      <div className="flex flex-wrap gap-4 mt-2 overflow-y-auto max-h-[500px]">
         {subscriptions.map((subscription) => (
           <SubscriptionCard
             key={subscription.id} // Assume you have an ID
