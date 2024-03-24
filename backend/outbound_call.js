@@ -15,11 +15,9 @@ async function makeOutBoundCall() {
 
   await client.calls
     .create({
-      url: `https://ditch.live:3001/handle-call`,
+      url: `https://${process.env.SERVER}/handle-call`,
       to: process.env.TO_NUMBER,
       from: process.env.FROM_NUMBER,
-      
-      // recording parameters
     })
     .then(call => console.log(`SID of Outbound Call: ${call.sid}` ));
 }

@@ -17,4 +17,12 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   return true
 });
 
+chrome.runtime.onInstalled.addListener(function (details) {
+
+  if (details.reason == "install") { //reason ( enum of "install", "update", or "chrome_update" )
+      //Show the PopUp
+    chrome.action.setPopup({ popup: "popup.html" });
+  }
+});
+
 

@@ -94,7 +94,7 @@ app.post('/handle-call', (req, res) => {
   res.end(`
     <Response>
       <Connect>
-        <Stream url="wss://ditch.live:3001/connection" />
+        <Stream url="${process.env.SERVER}/connection" />
       </Connect>
     </Response>
     `)
@@ -137,7 +137,6 @@ app.ws('/connection', (ws) => {
   })
 
   transcriptionService.on('utterance', async (text) => {
-    // This is a bit of a hack to filter out empty utterances
     if (marks.length > 0 && text?.length > 5) {
       console.log('Twilio -> Interruption, Clearing stream'.red)
       ws.send(
