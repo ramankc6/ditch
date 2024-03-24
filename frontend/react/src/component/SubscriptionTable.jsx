@@ -20,7 +20,7 @@ const SubscriptionCard = ({ subscription, handleRemoveSubscription }) => {
           {/* Company Name */}
           <div className="flex items-center gap-2">
             <h3 className="text-[30px] font-bold text-blue-700">Company: </h3> 
-            <p className="text-[30px] font-semibold">{subscription.companyName}</p>
+            <p className="text-[30px] font-semibold text-accent">{subscription.companyName}</p>
           </div>
 
           {/* Payment  */}
