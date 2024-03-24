@@ -30,6 +30,7 @@ class GptService extends EventEmitter {
     const userPhoneNumber = query.userPhone
     const companyName = query.companyName
     const summaryOfTOS = query.comment
+    console.log(summaryOfTOS)
     this.userContext = [
       {
         'role': 'system', 'content': `You're playing the role of ${userFullName}, a customer trying to cancel their subscription to ${companyName}. You'll talk in first person as if you're speaking directly to a customer service representative. You have ${userFullName}'s personal details, including his name (${userFullName}), email (${userEmailAddress}), and phone number (${userPhoneNumber}). You're also familiar with ${companyName}'s cancellation policy as summarized from their terms of service. The summary is as follows: ${summaryOfTOS}`

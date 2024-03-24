@@ -52,10 +52,10 @@ const summarizeTOS = async (tos) => {
 }
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  next();
-});
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+  next()
+})
 
 app.post('/api/cancelSubscription', async (req, res) => {
   console.log(req.body)
@@ -114,19 +114,19 @@ app.ws('/connection', (ws) => {
   console.log("hey")
   const query = url.parse(req.url, true).query
   ws.on('error', console.error)
-  // console.log("1")
+  console.log("1")
   // Filled in from start message
   let streamSid
   let callSid
-  // console.log("2")
+  console.log("2")
   const gptService = new GptService(query)
-  // console.log("3")
+  console.log("3")
   const streamService = new StreamService(ws)
-  // console.log("4")
+  console.log("4")
   const transcriptionService = new TranscriptionService()
-  // console.log("5")
+  console.log("5")
   const ttsService = new TextToSpeechService({})
-  // console.log("hey2")
+  console.log("hey2")
   let marks = []
   let interactionCount = 0
 
