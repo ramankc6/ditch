@@ -3,10 +3,10 @@ require('colors');
 const express = require('express');
 const ExpressWs = require('express-ws');
 
-const { GptService } = require('./gpt-service');
-const { StreamService } = require('./stream-service');
-const { TranscriptionService } = require('./transcription-service');
-const { TextToSpeechService } = require('./tts-service');
+const { GptService } = require('./gpt');
+const { StreamService } = require('./web-socket');
+const { TranscriptionService } = require('./transcription');
+const { TextToSpeechService } = require('./tts');
 
 const app = express();
 ExpressWs(app);
