@@ -1,14 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../context/userContext'
 import '../index.css' // Assuming Tailwind is configured here
+import { StarCanvas } from './canvas'
 import {
   addSubscription,
   getSubscriptions,
   removeSubscription,
 } from '../service/userService' // Make sure this points to your userService file
 
+
+
 const SubscriptionCard = ({ subscription, handleRemoveSubscription }) => {
   return (
+    
     <div className="w-[80%] max-w-sm flex justify-center mt-4">
       <div className="w-full bg-white p-6 rounded-2xl shadow-lg border border-gray-200"> 
         <div className="flex flex-col items-start gap-3"> 
@@ -16,7 +20,7 @@ const SubscriptionCard = ({ subscription, handleRemoveSubscription }) => {
           {/* Company Name */}
           <div className="flex items-center gap-2">
             <h3 className="text-[30px] font-bold text-blue-700">Company: </h3> 
-            <p className="text-[30px] font-semibold">{subscription.companyName}</p>
+            <p className="text-[30px] font-semibold text-accent">{subscription.companyName}</p>
           </div>
 
           {/* Payment  */}
@@ -47,6 +51,7 @@ const SubscriptionCard = ({ subscription, handleRemoveSubscription }) => {
                   </button>
             </div>  
           </div> 
+          
         </div>
       </div> 
     </div>
@@ -106,9 +111,20 @@ const SubscriptionTable = () => {
     setSubscriptions(updatedSubscriptions)
   }
 
-  return (
-    <div className="w-screen h-screen mx-auto p-6 bg-[#040a30]">
-      <h1 className="text-2xl text-[40px] text-white font-black mb-4 mx-3 mt-2">Subscriptions</h1>
+  return (  
+    <div className="w-screen h-screen mx-auto p-6">
+      <StarCanvas/>
+      <div className="flex  items-center flex-row w-screen">
+        <div className="flex justify-start items-center flex-col">
+          <h1 className="text-2xl text-[40px] text-accent font-black mb-4 mx-3 mt-2">Subscriptions</h1>
+  
+          <h2 className="text-xl text-[30px] text-accent font-black mb-4 mx-3">Welcome, {currentUser.email}</h2>
+        </div>
+        <div className='flex justify-end'>
+          <img src="../../ditch.png" alt="logo" className="w-28 h-28 rounded-2xl"/>
+        </div>
+      </div>
+      
 
       <div className="mt-7 w-full bg-white p-6 rounded-2xl shadow-lg"> 
       <h2 className="text-blue-700 text-[30px] font-bold">Add New Subscription:</h2>
@@ -152,7 +168,7 @@ const SubscriptionTable = () => {
         </div>
       </form>
       </div>
-
+      
       <div className='flex flex-wrap gap-4 mt-8'> 
         {subscriptions.map((subscription) => (
             <SubscriptionCard 
@@ -163,7 +179,6 @@ const SubscriptionTable = () => {
         ))}
       </div>
 
-      
 
     </div>
   )

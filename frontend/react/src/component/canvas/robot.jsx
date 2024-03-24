@@ -1,4 +1,4 @@
-import { Suspense, useRef, useEffect, useState} from 'react';
+import { Suspense, useRef, useState} from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Preload, useGLTF } from '@react-three/drei';
 
@@ -7,30 +7,30 @@ import CanvasLoader from '../Loader';
 const Robot = () => {
     const ref = useRef();
     
-    useFrame((state, delta) => {
+    useFrame((useState, delta) => {
       ref.current.rotation.y -= delta * 0.75;
       
     })  
 
-    const Robot = useGLTF('./ditchColored.glb')
+    const Robot = useGLTF('./ditchColored2.glb')
 
     return (
       <mesh ref={ref} rotation={[0, 0, 0]}>
         
 
         <ambientLight 
-            intensity={0.2}
+            intensity={0.65}
             />
-        <hemisphereLight intensity={1.9}
+        <hemisphereLight intensity={1.1}
         groundColor="black"/>
         <pointLight
-        position={[1,-2.5,0]} 
-        intensity={0.5}/>
+        position={[-3,3,0]} 
+        intensity={1.3}/>
         <spotLight
           position={[15,20,5]}
           angle ={20}
           penumbra={1}
-          intensity={10}
+          intensity={14}
           castShadow
           shadow-mapSize={1024}
         />
@@ -48,7 +48,6 @@ const Robot = () => {
     return (
       
       <Canvas
-        frameloop = "always"
         shadows
         camera= {{position: [10,-8, 0], fov: 30, rotateX: -Math.PI/8, rotateY: Math.PI/2.25 }}
       >

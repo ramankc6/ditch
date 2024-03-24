@@ -1,4 +1,5 @@
 import RobotCanvas from "./robot";
+import StarCanvas from "./stars";
 
 
-export { ForkCanvas };
+export { RobotCanvas, StarCanvas };

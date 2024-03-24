@@ -20,8 +20,6 @@ async function makeOutBoundCall() {
       from: process.env.FROM_NUMBER,
       
       // recording parameters
-      record: true,
-      recordingStatusCallback: '/recording-callback'
     })
     .then(call => console.log(`SID of Outbound Call: ${call.sid}` ));
 }

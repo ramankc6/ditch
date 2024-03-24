@@ -6,6 +6,14 @@
 @tailwind utilities;
 
 
+.main-layout {
+  @apply relative; /* Using Tailwind's 'apply' directive */
+}
+
+.content-area {
+  @apply relative; 
+}
+
 * {
   margin: 0px;
   padding: 0px;

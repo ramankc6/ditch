@@ -6,10 +6,12 @@ import Home from './page/Home'
 import './css/global.scss'
 
 
+
 const App = () => {
   return (
     <Router>
       <Routes>
+
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<Home />} />
