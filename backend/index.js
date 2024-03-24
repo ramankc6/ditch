@@ -10,6 +10,8 @@ require('dotenv').config();
 const { StreamService } = require('./stream-service'); 
 const https = require('https')
 const fs = require('fs')
+const { Deepgram } = require('@deepgram/sdk');
+const textToSpeech = require('@google-cloud/text-to-speech');
 
 const port = process.env.PORT;
 
@@ -53,15 +55,56 @@ app.get('/api/summurizeTOS', async (req, res) => {
 })
 
 app.post('/handle-call', (req, res) => {
+    console.log('handle-call called')
     const twiml = new twilio.twiml.VoiceResponse();
 
     twiml.say('Server is working.');
-    twiml.hangup();
+
+    const stream = twiml.connect().stream({
+        url: `wss://${process.env.SERVER}/connection`,
+    });
 
     res.type('text/xml');
     res.send(twiml.toString());
   });
 
+app.ws('/connection', (ws) => {
+    const streamService = new StreamService(ws);
+    const deepgram = new Deepgram(process.env.DEEPGRAM_API_KEY);
+    const ttsClient = new textToSpeech.textToSpeechClient();
+
+    ws.on('message', function message(data) {
+
+        if (msg.event === 'media') {
+            deepgram.transcription.live({
+                encoding: 'mulaw', // Audio encoding format (e.g., 'mulaw', 'linear16')
+                sample_rate: 8000, // Audio sample rate (e.g., 8000, 16000)
+                model: 'phone_call', // Transcription model to use (e.g., 'general', 'nova-2')
+                punctuate: true, // Whether to include punctuation in the transcript
+                interim_results: true, // Whether to receive interim (partial) transcription results
+                endpointing: 300, // Endpointing sensitivity (higher values = more sensitive)
+                utterance_end_ms: 1500
+            })
+            .on('transcriptReceived', async (transcription)=> {
+                const text = transcription.channel.alternatives[0].transcript;
+
+                if (text.toLowerCase().includes('apple')){
+
+                    const request = {
+                        input: {text: 'Secret phrase recognized'},
+                        voice: { languageCode: 'en-US', ssmlGender: 'FEMALE'},
+                        audioConfig: {audioEncoding: 'MP3'},
+                    }
+
+                    const [response] = await ttsClient.synthesizeSpeech(request);
+                    const audio = response.audioContent
+
+                    streamService.sendAudio(audio.toString('base64'));
+                }
+            })
+        }
+    })
+})
 const privateKey = fs.readFileSync('private.key', 'utf8')
 
 const certificate = fs.readFileSync('certificate.crt', 'utf8')

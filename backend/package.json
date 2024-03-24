@@ -13,12 +13,14 @@
   "license": "ISC",
   "dependencies": {
     "@deepgram/sdk": "^3.2.0",
+    "@google-cloud/text-to-speech": "^5.1.0",
     "colors": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.1",
     "express-ws": "^5.0.2",
     "pg": "^8.11.3",
-    "twilio": "^5.0.1"
+    "twilio": "^5.0.1",
+    "uuid": "^9.0.1"
   }
 }
