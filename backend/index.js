@@ -31,11 +31,12 @@ initializeFirebase()
 
 app.post('/api/validate', async (req, res) => {
   console.log("validate called")
-  const { email, password } = req.body
-  const userCredential = await verifyEmailAndPassword(email, password)
-  if (userCredential) {
-    res.json({ success: true, user: userCredential.user })
-  }
+  res.status(200).send('OK')
+  // const { email, password } = req.body
+  // const userCredential = await verifyEmailAndPassword(email, password)
+  // if (userCredential) {
+  //   res.json({ success: true, user: userCredential.user })
+  // }
 }
 )
 
@@ -47,7 +48,6 @@ const summarizeTOS = async (tos) => {
       messages: messages
     })
     const aiResponse = response.choices[0].message.content
-    console.log(aiResponse)
     return aiResponse
   } catch (error) {
     console.error('Failed to send message', error)
@@ -56,20 +56,18 @@ const summarizeTOS = async (tos) => {
 }
 
 app.post('/api/getTOS', async (req, res) => {
-  console.log("getTOS called")
-  const { userEmail, url, compName, compPhone, userPay } = req.body
-  const subscription = { url, compName, compPhone, userPay }
-  console.log("subscription", subscription)
+  const { userEmail, url, companyName, phoneNumber, monthlyPayment } = req.body
+  const subscription = { url, companyName, phoneNumber, monthlyPayment }
 
   exec('python3 fetch_tos.py ' + url, async (error, stdout, stderr) => {
     if (error) {
       console.error(`exec error: ${error}`)
       return res.status(500).send('Server error')
     }
-    console.log(stdout)
+    // console.log(stdout)
     const sum = await summarizeTOS(stdout)
-    subscription.summary = sum
-    addSubscription(email, subscription)
+    subscription.comment = sum
+    addSubscription(userEmail, subscription)
     res.json(sum)
   })
 })
